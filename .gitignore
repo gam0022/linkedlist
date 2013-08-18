@@ -1,0 +1,8 @@
+*.swp
+.DS_Store
+
+*.bundle
+Makefile
+*.o
+*.gomi
+.RUBYARCHDIR.time
