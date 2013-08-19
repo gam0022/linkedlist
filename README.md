@@ -15,6 +15,44 @@ Ruby の Array は 配列となっているため、先頭に要素を追加し�
 
 しかし、どちらも Ruby で実装されていたので、Cの拡張として実装し直す意味はあるのではないかと思います。
 
+## 使用例
+
+Ocaml の List に影響を受けて実装したので、次のようなメソッドがあります。
+
+* cons
+* head
+* tail
+* rev_append
+* rev
+* append
+* length
+* nth
+
+以下のような動作をします。
+
+```ruby
+require 'linkedlist'
+
+p LinkedList.new # => ()
+
+p l1 = LinkedList.new.cons(1).cons(2).cons(3) # => (3, 2, 1)
+p l1.head # => 3
+p l1.tail # => (2, 1)
+
+p l2 = LinkedList[1, 2, 3, "a", "b"] #=> (1, 2, 3, "a", "b")
+
+p l1.rev_append(l2) #=> (1, 2, 3, 1, 2, 3, "a", "b")
+p l1.rev #=> (1, 2, 3)
+p l3 = l1.append(l2) #=> (3, 2, 1, 1, 2, 3, "a", "b")
+
+p l3.length # => 8
+p LinkedList[].length #=> 0
+
+p l3.nth(0) #=> 3
+p l3[7] #=> "b"
+p l3[100] #=> nil
+```
+
 ## ベンチマーク結果
 
 先頭に長さ3のリストを 連結する処理にかかった秒数を、連結した回数ごとにまとめました。
@@ -30,15 +68,11 @@ Ruby の Array は 配列となっているため、先頭に要素を追加し�
 
 リストの長さが長くなるほど、LinkedListの方が相対的に高速になります。
 
-## その他
-
-* Ocaml の List にすごい影響を受けています。
-
 ## インストール方法
 
 ```bash
 # インストール先のrubyで extconf.rb を実行する
-ruby extconf.rb
-make
-make install
+$ ruby extconf.rb
+$ make
+$ make install
 ```
