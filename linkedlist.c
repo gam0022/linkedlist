@@ -99,6 +99,34 @@ linkedlist_to_a(VALUE self)
 }
 
 static VALUE
+linkedlist_inspect(VALUE self)
+{
+  VALUE str, str2;
+  struct linkedlist *ptr;
+
+  Data_Get_Struct(self, struct linkedlist, ptr);
+  str = rb_str_buf_new2("(");
+
+  if (ptr->next != Qnil) {
+    while (true) {
+      str2 = rb_inspect(ptr->value);
+      rb_str_buf_append(str, str2);
+      Data_Get_Struct(ptr->next, struct linkedlist, ptr);
+      if (ptr->next != Qnil) {
+        rb_str_buf_cat_ascii(str, ", ");
+      } else {
+        break;
+      }
+    }
+  }
+
+  rb_str_buf_cat2(str, ")");
+  OBJ_INFECT(str, self);
+
+  return str;
+}
+
+static VALUE
 linkedlist_rev_append(VALUE l1, VALUE l2)
 {
   struct linkedlist *ptr;
@@ -178,6 +206,8 @@ void Init_linkedlist(void)
   rb_define_method(cLinkedList, "head", linkedlist_head, 0);
   rb_define_method(cLinkedList, "tail", linkedlist_tail, 0);
   rb_define_method(cLinkedList, "to_a", linkedlist_to_a, 0);
+  rb_define_method(cLinkedList, "inspect", linkedlist_inspect, 0);
+  rb_define_alias(cLinkedList,  "to_s", "inspect");
   rb_define_method(cLinkedList, "rev_append", linkedlist_rev_append, 1);
   rb_define_method(cLinkedList, "rev", linkedlist_rev, 0);
   rb_define_method(cLinkedList, "append", linkedlist_append, 1);
