@@ -1,14 +1,12 @@
 # LinkedList
 
-Ruby で LinkedList (連結リスト) を実装しました。
+Ruby で `LinkedList` (連結リスト) を実装しました。
 
-Ruby の Array は 配列となっているため、先頭に要素を追加したり、連結するのは効率が悪そうだったので、試しに作ってみました。
+Ruby の `Array` は 配列で実装されているため、先頭への要素を追加や連結するのは効率が悪そうだったので、試しに作ってみました。
 
 ## 車輪の再発明じゃないの?
 
-`gem search linked_list`
-
-で調べてみたところ、次の2つのgemが見つかりました。
+`gem search linked_list` で調べてみたところ、次の2つのgemが見つかりました。
 
 * circular_linked_list (0.0.1)
 * linked__list (1.0.0)
@@ -17,7 +15,7 @@ Ruby の Array は 配列となっているため、先頭に要素を追加し�
 
 ## 使用例
 
-Ocaml の List に影響を受けて実装したので、次のようなメソッドがあります。
+Ocaml の `List` に影響を受けて実装したので、次のようなメソッドがあります。
 
 * cons
 * head
@@ -27,6 +25,11 @@ Ocaml の List に影響を受けて実装したので、次のようなメソ�
 * append
 * length
 * nth
+
+また、Ruby独特の文字列や配列への変換メソッドもあります。
+
+* inspect(to_s)
+* to_a
 
 以下のような動作をします。
 
@@ -66,7 +69,7 @@ p l3[100] #=> nil
 
 この測定には、`benchmark.rb`を用いました。
 
-リストの長さが長くなるほど、LinkedListの方が相対的に高速になります。
+リストの長さが長くなるほど、`Array`よりも`LinkedList` の方が相対的に高速になります。
 
 ## インストール方法
 
