@@ -1,32 +1,41 @@
 require 'linkedlist'
 require 'time'
 
-#
-# Array
-#
+puts "| Times | Array | LinkedList |"
+puts "|------:|------:|-----------:|"
 
-start = Time.now
+[10, 1000, 10000, 100000].each do |n|
 
-array = Array.new
-1.upto(100000) do |i|
-  array = Array[i] + array
+  print "| #{n} "
+
+  #
+  # Array
+  #
+
+  start = Time.now
+
+  array = Array.new
+  1.upto(n) do |i|
+    array = Array[i, i, i] + array
+  end
+
+  print "| #{Time.now - start} "
+  #p array
+
+
+
+  #
+  # LinkedList
+  #
+
+  start = Time.now
+
+  list = LinkedList.new
+  1.upto(n) do |i|
+    list = LinkedList[i, i, i] + list
+  end
+
+  puts "| #{Time.now - start} |"
+  #p list
+
 end
-
-puts "Array#+: #{Time.now - start} sec."
-#p array
-
-
-
-#
-# LinkedList
-#
-
-start = Time.now
-
-list = LinkedList.new
-1.upto(100000) do |i|
-  list = LinkedList[i] + list
-end
-
-puts "LinkedList#+: #{Time.now - start} sec."
-#p list
