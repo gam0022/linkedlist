@@ -85,6 +85,14 @@ linkedlist_tail(VALUE self)
 }
 
 static VALUE
+linkedlist_is_empty(VALUE self)
+{
+  struct linkedlist *ptr;
+  Data_Get_Struct(self, struct linkedlist, ptr);
+  return ptr->next == Qnil ? Qtrue : Qfalse;
+}
+
+static VALUE
 linkedlist_to_a(VALUE self)
 {
   struct linkedlist *ptr;
@@ -206,6 +214,7 @@ void Init_linkedlist(void)
   rb_define_method(cLinkedList, "cons", linkedlist_cons, 1);
   rb_define_method(cLinkedList, "head", linkedlist_head, 0);
   rb_define_method(cLinkedList, "tail", linkedlist_tail, 0);
+  rb_define_method(cLinkedList, "empty?", linkedlist_is_empty, 0);
   rb_define_method(cLinkedList, "to_a", linkedlist_to_a, 0);
   rb_define_method(cLinkedList, "inspect", linkedlist_inspect, 0);
   rb_define_alias(cLinkedList,  "to_s", "inspect");
