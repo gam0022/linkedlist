@@ -114,6 +114,42 @@ linkedlist_append(VALUE l1, VALUE l2)
   }
 }
 
+static int
+linkedlist_length_core(VALUE self)
+{
+  struct linkedlist *ptr;
+
+  Data_Get_Struct(self, struct linkedlist, ptr);
+  if (ptr->next == Qnil) {
+    return 0;
+  } else {
+    return 1 + linkedlist_length_core(ptr->next);
+  }
+}
+
+static VALUE
+linkedlist_length(VALUE self)
+{
+  return INT2FIX(linkedlist_length_core(self));
+}
+
+static VALUE
+linkedlist_nth(VALUE self, VALUE index)
+{
+  struct linkedlist *ptr;
+  int i, n;
+  
+  n = FIX2INT(index);
+  Data_Get_Struct(self, struct linkedlist, ptr);
+  for (i = 0; ptr->next != Qnil; ++i) {
+    if (i == n) {
+      return ptr->value;
+    }
+    Data_Get_Struct(ptr->next, struct linkedlist, ptr);
+  }
+  return Qnil;
+}
+
 void Init_linkedlist(void)
 {
   cLinkedList = rb_define_class("LinkedList", rb_cObject);
@@ -126,4 +162,7 @@ void Init_linkedlist(void)
   rb_define_method(cLinkedList, "rev_append", linkedlist_rev_append, 1);
   rb_define_method(cLinkedList, "rev", linkedlist_rev, 0);
   rb_define_method(cLinkedList, "append", linkedlist_append, 1);
+  rb_define_method(cLinkedList, "length", linkedlist_length, 0);
+  rb_define_method(cLinkedList, "nth", linkedlist_nth, 1);
+  rb_define_alias(cLinkedList,  "[]", "nth");
 }
