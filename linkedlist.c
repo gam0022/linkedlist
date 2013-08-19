@@ -32,7 +32,7 @@ linkedlist_initialize(VALUE self)
   Data_Get_Struct(self, struct linkedlist, ptr);
   ptr->value = Qnil;
   ptr->next = Qnil;
-  return Qnil;
+  return self;
 }
 
 static VALUE
@@ -51,21 +51,6 @@ linkedlist_cons(VALUE self, VALUE a)
 }
 
 static VALUE
-linkedlist_to_a(VALUE self)
-{
-  struct linkedlist *ptr;
-  VALUE ary;
-  
-  ary = rb_ary_new();
-  Data_Get_Struct(self, struct linkedlist, ptr);
-  while (ptr->next != Qnil) {
-    rb_ary_push(ary, ptr->value);
-    Data_Get_Struct(ptr->next, struct linkedlist, ptr);
-  }
-  return ary;
-}
-
-static VALUE
 linkedlist_head(VALUE self)
 {
   struct linkedlist *ptr;
@@ -81,13 +66,64 @@ linkedlist_tail(VALUE self)
   return ptr->next;
 }
 
+static VALUE
+linkedlist_to_a(VALUE self)
+{
+  struct linkedlist *ptr;
+  VALUE ary;
+  
+  ary = rb_ary_new();
+  Data_Get_Struct(self, struct linkedlist, ptr);
+  while (ptr->next != Qnil) {
+    rb_ary_push(ary, ptr->value);
+    Data_Get_Struct(ptr->next, struct linkedlist, ptr);
+  }
+  return ary;
+}
+
+static VALUE
+linkedlist_rev_append(VALUE l1, VALUE l2)
+{
+  struct linkedlist *ptr;
+
+  Data_Get_Struct(l1, struct linkedlist, ptr);
+  if (ptr->next == Qnil) {
+    return l2;
+  } else {
+    return linkedlist_rev_append(ptr->next, linkedlist_cons(l2, ptr->value));
+  }
+}
+
+static VALUE
+linkedlist_rev(VALUE self)
+{
+  return linkedlist_rev_append(self,
+      linkedlist_initialize(linkedlist_alloc(cLinkedList)));
+}
+
+static VALUE
+linkedlist_append(VALUE l1, VALUE l2)
+{
+  struct linkedlist *ptr;
+
+  Data_Get_Struct(l1, struct linkedlist, ptr);
+  if (ptr->next == Qnil) {
+    return l2;
+  } else {
+    return linkedlist_cons( linkedlist_append(ptr->next, l2), ptr->value);
+  }
+}
+
 void Init_linkedlist(void)
 {
   cLinkedList = rb_define_class("LinkedList", rb_cObject);
   rb_define_alloc_func(cLinkedList, linkedlist_alloc);
   rb_define_private_method(cLinkedList, "initialize", linkedlist_initialize, 0);
   rb_define_method(cLinkedList, "cons", linkedlist_cons, 1);
-  rb_define_method(cLinkedList, "to_a", linkedlist_to_a, 0);
   rb_define_method(cLinkedList, "head", linkedlist_head, 0);
   rb_define_method(cLinkedList, "tail", linkedlist_tail, 0);
+  rb_define_method(cLinkedList, "to_a", linkedlist_to_a, 0);
+  rb_define_method(cLinkedList, "rev_append", linkedlist_rev_append, 1);
+  rb_define_method(cLinkedList, "rev", linkedlist_rev, 0);
+  rb_define_method(cLinkedList, "append", linkedlist_append, 1);
 }
