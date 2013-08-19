@@ -36,7 +36,7 @@ Ruby の Array は 配列となっているため、先頭に要素を追加し�
 
 ## インストール方法
 
-``` bash インストール方法
+```bash
 # インストール先のrubyで extconf.rb を実行する
 ruby extconf.rb
 make
