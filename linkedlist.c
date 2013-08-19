@@ -15,6 +15,7 @@ static void
 linkedlist_mark(struct linkedlist *ptr)
 {
   rb_gc_mark(ptr->value);
+  rb_gc_mark(ptr->next);
 }
 
 static VALUE
@@ -211,6 +212,7 @@ void Init_linkedlist(void)
   rb_define_method(cLinkedList, "rev_append", linkedlist_rev_append, 1);
   rb_define_method(cLinkedList, "rev", linkedlist_rev, 0);
   rb_define_method(cLinkedList, "append", linkedlist_append, 1);
+  rb_define_alias(cLinkedList,  "+", "append");
   rb_define_method(cLinkedList, "length", linkedlist_length, 0);
   rb_define_method(cLinkedList, "nth", linkedlist_nth, 1);
   rb_define_alias(cLinkedList,  "[]", "nth");
