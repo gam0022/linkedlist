@@ -39,15 +39,32 @@ static VALUE
 linkedlist_cons(VALUE self, VALUE a)
 {
   struct linkedlist *ptr, *new_ptr;
-  VALUE new_obj;
+  VALUE result;
 
   Data_Get_Struct(self, struct linkedlist, ptr);
-  new_obj = linkedlist_alloc(cLinkedList);
-  Data_Get_Struct(new_obj, struct linkedlist, new_ptr);
+  result = linkedlist_alloc(cLinkedList);
+  Data_Get_Struct(result, struct linkedlist, new_ptr);
 
   new_ptr->value = a;
   new_ptr->next = self;
-  return new_obj;
+  return result;
+}
+
+static VALUE
+linkedlist_s_create_core(VALUE result, int argc, VALUE *argv, int i)
+{
+  if (i < 0) {
+    return result;
+  } else {
+    return linkedlist_s_create_core( linkedlist_cons(result, argv[i]), argc, argv, i-1);
+  }
+}
+
+static VALUE
+linkedlist_s_create(int argc, VALUE *argv, VALUE klass)
+{
+  VALUE result = linkedlist_initialize(linkedlist_alloc(klass));
+  return linkedlist_s_create_core(result, argc, argv, argc - 1);
 }
 
 static VALUE
@@ -154,6 +171,8 @@ void Init_linkedlist(void)
 {
   cLinkedList = rb_define_class("LinkedList", rb_cObject);
   rb_define_alloc_func(cLinkedList, linkedlist_alloc);
+  rb_define_singleton_method(cLinkedList, "[]", linkedlist_s_create, -1);
+
   rb_define_private_method(cLinkedList, "initialize", linkedlist_initialize, 0);
   rb_define_method(cLinkedList, "cons", linkedlist_cons, 1);
   rb_define_method(cLinkedList, "head", linkedlist_head, 0);
