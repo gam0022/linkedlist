@@ -1,8 +1,12 @@
 # LinkedList
 
-Ruby で `LinkedList` (連結リスト) を実装しました。
+RubyのC拡張として `LinkedList` (連結リスト) を実装しました。
 
 Ruby の `Array` は 配列で実装されているため、先頭への要素を追加や連結するのは効率が悪そうだったので、試しに作ってみました。
+
+ブログに記事を書きました。
+
+[RubyでLinkedListを使うためのC拡張を作った](http://gam0022.net/blog/2013/08/19/ruby-linkedlist/)
 
 ## 車輪の再発明じゃないの?
 
@@ -74,6 +78,8 @@ p l3[100] #=> nil
 ## インストール方法
 
 ```bash
+$ git clone https://github.com/gam0022/linkedlist.git
+$ cd linkedlist
 # インストール先のrubyで extconf.rb を実行する
 $ ruby extconf.rb
 $ make
