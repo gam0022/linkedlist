@@ -1,3 +1,10 @@
+# 移動しました
+
+RubyGemsに `immutalbe_list` として公開したので、リポジトリも移動しました。
+
+* [gam0022 / immutable\_list](https://github.com/gam0022/immutable_list)
+
+
 # LinkedList
 
 RubyのC拡張として `LinkedList` (連結リスト) を実装しました。
